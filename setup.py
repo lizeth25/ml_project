@@ -4,7 +4,7 @@ Lizeth Lucero
 
 
 import csv
-
+import math
 
 
 # Load data into python from CSV file
@@ -14,12 +14,12 @@ with open("deidentified_data.csv") as fp:
     for row in rows:
         print(header) # print the labels
         print(row) # print the current row
-        entry = dict(zip(header, row)) # glue them into a dict
-        print(entry) # print that dict
-	# want to remove rows that have NaN for ECG
-	print("ecg : " + str(row[0]))
-	print(type(row[0]))
-        break # stop after 1 row of data, so you can inspect, choose which columns matter, etc.
+        # entry = dict(zip(header, row)) # glue them into a dict
+        # print(entry) # print that dict
+	# want to remove rows that have NaN for ECG or skin tone
+	if (not row[0] == 'NaN') and (not row[8] == 'NaN'):
+		entry = dict(zip(header, row)) # glue them into a dict
+        	break # stop after 1 row of data, so you can inspect, choose which columns matter, etc.
 
 
 '''
