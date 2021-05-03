@@ -76,7 +76,9 @@ from shared import simple_boxplot
 from sklearn.preprocessing import StandardScaler
 from sklearn.utils import resample
 import json
+from sklearn.neural_network import MLPRegressor
 from sklearn.tree import DecisionTreeRegressor
+from sklearn.linear_model import SGDRegressor
 
 #%% load up the data
 # examples = []
@@ -138,7 +140,8 @@ for train_percent in percentages:
             X_train, y_train, n_samples=n_samples, replace=False
         )  # type:ignore
         # Note here, I'm using a simple classifier for speed, rather than the best.
-        clf = DecisionTreeRegressor(random_state=RANDOM_SEED + train_percent + i)
+        # clf = SGDRegressor(random_state=RANDOM_SEED + train_percent + i)
+        clf = MLPRegressor(max_iter=10000, random_state=RANDOM_SEED + train_percent + i)
         clf.fit(X_sample, y_sample)
         # so we get 100 scores per percentage-point.
         scores[label].append(clf.score(X_vali, y_vali))
@@ -157,7 +160,7 @@ plt.xlabel("Percent Training Data")
 plt.ylabel("Mean Accuracy")
 plt.xlim([0, 100])
 plt.title("Shaded Accuracy Plot")
-plt.savefig("graphs/p09-area-Accuracy.png")
+plt.savefig("graphs/MLPRegressor-Accuracy.png")
 plt.show()
 
 
@@ -166,6 +169,22 @@ simple_boxplot(
     scores,
     "Learning Curve",
     xlabel="Percent Training Data",
-    ylabel="Accuracy",
-    save="graphs/p09-boxplots-Accuracy.png",
+    ylabel="R**2",
+    save="graphs/MLPRegressor-boxplots-Accuracy.png",
 )
+
+
+print("MLPRegressor")
+mlpr = MLPRegressor(max_iter=10000)
+mlpr.fit(rX_vali, y_sample)
+print(mlpr.score(X_vali, y_vali))
+
+"""
+SGDRegressor
+0.01688289921445363
+"""
+"""
+All-but feature models
+"""
+
+#  ECG  Apple Watch  Empatica  Garmin  Fitbit  Miband  Biovotion  ID  Skin Tone Activity
